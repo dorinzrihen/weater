@@ -1,5 +1,6 @@
 
 const kelvin = 273.16;
+let cardWeather = {};
 
 function weatherOptions(){
     const d = new Date();
@@ -23,20 +24,31 @@ function weatherOptions(){
 }
 
 async function fetchWeatherApi(api) {
-    const res = await fetch(api);
-    const data = await res.json();
-    return data;
+    try{
+        const res = await fetch(api);
+        const data = await res.json();
+        return data;
+    }
+    catch{
+        console.log("[ERROR] with the server")
+    }
 }
 async function getApiByCityName(cityName){
-    const data = await fetchWeatherApi(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=21cc8985dcb56222e056c7c649b11e0e`);
+    try{
+        const data = await fetchWeatherApi(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=21cc8985dcb56222e056c7c649b11e0e`);
 
-    const weatherCard = {
-        name : data.name,
-        temp : data.main.temp,
-        weather : data.weather[0].main
+        const weatherCard = {
+            name : data.name,
+            temp : data.main.temp,
+            weather : data.weather[0].main
+        }
+    
+        setMiniCardInfo(weatherCard);
+    }
+    catch{
+        console.log("[ERROR] check if you have typo");
     }
 
-    setMiniCardInfo(weatherCard);
 }
 
 async function getApiByGeographicCoordinates(latitude,longitude){
@@ -52,7 +64,7 @@ async function getApiByGeographicCoordinates(latitude,longitude){
     setCardInfo(weatherCard);
 }
 
-//getApiByCityName('tel aviv');
+
 
 function getTime(unix){
     let date = new Date(unix*1000);
@@ -73,22 +85,33 @@ function setInfo(text){
     return info;
 }
 
-function setMiniCardInfo(weatherCard){
-    const weatherContainer = document.querySelector('.weather-container');
-    const miniWeatherCard = document.createElement('div');
-    
-    const infoCardSide = document.createElement('div');
-    const svgPick = document.createElement('div');
-    svgPick.classList.add('mini-card-img')
-    miniWeatherCard.classList.add('card-container');
-    infoCardSide.classList.add('mini-card');
-    svgPick.innerHTML = `<img src="${weatherOptions()[weatherCard.weather]}" alt="">`
+function checkIfAlreadyExists(name){
+    if(cardWeather.hasOwnProperty(name)){
+        console.log("yes");
+        return false;
+    }
+    return true;
+}
 
-    infoCardSide.appendChild(setInfo(weatherCard.name));
-    infoCardSide.appendChild(setInfo(`${Math.floor(weatherCard.temp - kelvin)}°C`));
-    miniWeatherCard.appendChild(infoCardSide);
-    miniWeatherCard.appendChild(svgPick);
-    weatherContainer.appendChild(miniWeatherCard);
+
+function setMiniCardInfo(weatherCard){
+    if(checkIfAlreadyExists(weatherCard.name)){
+        const weatherContainer = document.querySelector('.weather-container');
+        const miniWeatherCard = document.createElement('div');
+        
+        const infoCardSide = document.createElement('div');
+        const svgPick = document.createElement('div');
+        svgPick.classList.add('mini-card-img')
+        miniWeatherCard.classList.add('card-container');
+        infoCardSide.classList.add('mini-card');
+        svgPick.innerHTML = `<img src="${weatherOptions()[weatherCard.weather]}" alt="">`
+    
+        infoCardSide.appendChild(setInfo(weatherCard.name));
+        infoCardSide.appendChild(setInfo(`${Math.floor(weatherCard.temp - kelvin)}°C`));
+        miniWeatherCard.appendChild(infoCardSide);
+        miniWeatherCard.appendChild(svgPick);
+        weatherContainer.appendChild(miniWeatherCard);
+    }
 }
 
 
@@ -116,10 +139,12 @@ function geoFindMe() {
   //current location function
   geoFindMe();
 
+
 function getCityName(){
     const inputCity = document.querySelector('#weather-city');
     getApiByCityName(inputCity.value);
+
 }
 
 const btnGetCity = document.querySelector('.get-city');
-btnGetCity.addEventListener('click', getCityName)
+btnGetCity.addEventListener('click', getCityName);
