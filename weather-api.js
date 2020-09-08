@@ -30,7 +30,7 @@ async function fetchWeatherApi(api) {
         return data;
     }
     catch{
-        console.log("[ERROR] with the server")
+        msg.textContent = "something wrong, try again later";
     }
 }
 async function getApiByCityName(cityName){
@@ -46,7 +46,7 @@ async function getApiByCityName(cityName){
         setMiniCardInfo(weatherCard);
     }
     catch{
-        console.log("[ERROR] check if you have typo");
+        msg.textContent = "something wrong, maybe typo"
     }
 
 }
@@ -85,17 +85,21 @@ function setInfo(text){
     return info;
 }
 
-function checkIfAlreadyExists(name){
-    if(cardWeather.hasOwnProperty(name)){
-        console.log("yes");
+function checkIfAlreadyExists(miniCardObj){
+    if(cardWeather.hasOwnProperty(miniCardObj.name)){
+        msg.textContent = "Already exists :)";
         return false;
     }
-    return true;
+    else{
+        cardWeather[miniCardObj.name] = miniCardObj;
+        return true;
+    }
+    
 }
 
 
 function setMiniCardInfo(weatherCard){
-    if(checkIfAlreadyExists(weatherCard.name)){
+    if(checkIfAlreadyExists(weatherCard)){
         const weatherContainer = document.querySelector('.weather-container');
         const miniWeatherCard = document.createElement('div');
         
@@ -134,10 +138,9 @@ function geoFindMe() {
       navigator.geolocation.getCurrentPosition(success, error);
     }
   
-  }
+}
   
-  //current location function
-  geoFindMe();
+
 
 
 function getCityName(){
@@ -146,5 +149,8 @@ function getCityName(){
 
 }
 
+//current location function
+geoFindMe();
 const btnGetCity = document.querySelector('.get-city');
+const msg = document.querySelector('.msg');
 btnGetCity.addEventListener('click', getCityName);

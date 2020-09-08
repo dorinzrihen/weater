@@ -13,6 +13,20 @@ body{
     margin: 20px;
 }
 
+button{
+    background-image: linear-gradient(-10deg, rgba(0, 162, 255, 0.596), rgba(103, 58, 175, 0.513));
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
+
+input{
+    padding: 5px 10px;
+}
+
 .card-container{
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -61,3 +75,13 @@ body{
     color: white;
     padding: 0;
 }
+
+@media (max-width: 500px) {
+    body{
+        margin: 5px;
+    }
+
+    .card-container{
+        width: 90vw;
+    }
+  }
