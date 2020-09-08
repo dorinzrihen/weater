@@ -28,7 +28,7 @@ async function fetchWeatherApi(api) {
     return data;
 }
 async function getApiByCityName(cityName){
-    const data = await fetchWeatherApi(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=21cc8985dcb56222e056c7c649b11e0e`);
+    const data = await fetchWeatherApi(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=21cc8985dcb56222e056c7c649b11e0e`);
 
     const weatherCard = {
         name : data.name,
@@ -40,7 +40,7 @@ async function getApiByCityName(cityName){
 }
 
 async function getApiByGeographicCoordinates(latitude,longitude){
-    const data = await fetchWeatherApi(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=21cc8985dcb56222e056c7c649b11e0e`);
+    const data = await fetchWeatherApi(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=21cc8985dcb56222e056c7c649b11e0e`);
 
     const weatherCard = {
         name : data.name,
