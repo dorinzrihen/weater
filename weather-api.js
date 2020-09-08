@@ -1,12 +1,30 @@
 
 const kelvin = 273.16;
 
-
+function weatherOptions(){
+    const d = new Date();
+    const hour = d.getHours();
+    let option;
+    if(hour>=18){
+        option = {
+            Clear:'/animated/night.svg',
+            Clouds:'/animated/cloudy-night-1.svg',
+            Rain:'/animated/rainy-5.svg',
+        }
+    }
+    else{
+        option = {
+            Clear:'/animated/day.svg',
+            Clouds:'/animated/cloudy-day-1.svg',
+            Rain:'/animated/rainy-5.svg',
+        }
+    }
+    return option;
+}
 
 async function fetchWeatherApi(api) {
     const res = await fetch(api);
     const data = await res.json();
-    console.log(data)
     return data;
 }
 async function getApiByCityName(cityName){
@@ -47,7 +65,6 @@ function setCardInfo(weatherCard){
     weatherContainer.appendChild(setInfo(`${Math.floor(weatherCard.temp - kelvin)}°C`));
     weatherContainer.appendChild(setInfo(`Sunrise  ${getTime(weatherCard.sunrise)}`));
     weatherContainer.appendChild(setInfo(`Sunset  ${getTime(weatherCard.sunset)}`));
-    weatherContainer.appendChild(setInfo(weatherCard.weather));
 }
 
 function setInfo(text){
@@ -65,11 +82,10 @@ function setMiniCardInfo(weatherCard){
     svgPick.classList.add('mini-card-img')
     miniWeatherCard.classList.add('card-container');
     infoCardSide.classList.add('mini-card');
-    svgPick.innerHTML = `<img src="/animated/cloudy-day-1.svg" alt="">`
+    svgPick.innerHTML = `<img src="${weatherOptions()[weatherCard.weather]}" alt="">`
 
     infoCardSide.appendChild(setInfo(weatherCard.name));
     infoCardSide.appendChild(setInfo(`${Math.floor(weatherCard.temp - kelvin)}°C`));
-    infoCardSide.appendChild(setInfo(weatherCard.weather));
     miniWeatherCard.appendChild(infoCardSide);
     miniWeatherCard.appendChild(svgPick);
     weatherContainer.appendChild(miniWeatherCard);

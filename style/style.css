@@ -56,7 +56,8 @@ body{
 .mini-card{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     color: white;
+    padding: 0;
 }
